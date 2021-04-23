@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.hibernate.validator:hibernate-validator")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-rsocket")

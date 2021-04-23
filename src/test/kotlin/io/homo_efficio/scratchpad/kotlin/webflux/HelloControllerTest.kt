@@ -8,7 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.test.web.reactive.server.expectBody
-import org.springframework.web.reactive.function.BodyInserters
 
 @WebFluxTest(HelloController::class)
 internal class HelloControllerTest {
@@ -16,6 +15,7 @@ internal class HelloControllerTest {
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Autowired private lateinit var wtc: WebTestClient
+
 
     @Test
     fun `greeting`() {
@@ -34,14 +34,27 @@ internal class HelloControllerTest {
         wtc.post().uri("/hello")
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .body(BodyInserters.fromValue(
-                HelloMessage(null, "Homo Efficio", "Hi all~ I'm omwomw")))
+            .bodyValue(
+//                HelloMessage(
+//                    null,
+//                    "Homo Efficio",
+//                    "Hi all~ I am Homo Efficio"
+//                )
+                HelloMsgJava(
+                        null,
+                "Homo Efficio",
+                "Hi all~ I am Homo Efficio"
+                )
+            )
             .exchange()
             .expectBody<HelloMessage>()
             .consumeWith {
-                log.debug("msg.name: ${it.responseBody?.name}")
-                log.debug("msg.msg: ${it.responseBody?.msg}")
-                log.debug("${it.responseBody}")
+                val helloMessage = it.responseBody
+                log.debug("msg.name: ${helloMessage?.username}")
+                log.debug("msg.msg: ${helloMessage?.msg}")
+                log.debug("$helloMessage")
+                assertThat(helloMessage?.username).isEqualTo("Homo Efficio")
+                assertThat(helloMessage?.msg).isEqualTo("Hi all~ I am Homo Efficio")
             }
     }
 }
