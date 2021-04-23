@@ -18,9 +18,9 @@ class HelloController {
 
     @PostMapping
     suspend fun newHello(@RequestBody msg: HelloMessage):
-            Mono<ResponseEntity<HelloMessage>> {
+            ResponseEntity<HelloMessage> {
 
-        return Mono.just(ResponseEntity.ok(msg))
+        return ResponseEntity.ok(msg)
     }
 
 }
