@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.32"
     kotlin("plugin.spring") version "1.4.32"
+    kotlin("plugin.noarg") version "1.4.32"
 }
 
 group = "io.homo_efficio"
@@ -51,4 +52,8 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+noArg {
+    annotation("io.homo_efficio.scratchpad.kotlin.webflux.NoArg")
 }

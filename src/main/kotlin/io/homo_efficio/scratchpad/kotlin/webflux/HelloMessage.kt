@@ -2,6 +2,7 @@ package io.homo_efficio.scratchpad.kotlin.webflux
 
 import javax.validation.constraints.Size
 
+@ZeroArgConstructor
 data class HelloMessage(
     val id: String?,
 
