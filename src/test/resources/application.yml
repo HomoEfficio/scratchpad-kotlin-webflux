@@ -1,0 +1,3 @@
+logging:
+  level:
+    io.homo_efficio: DEBUG
