@@ -1,3 +1,4 @@
 logging:
   level:
+    root: DEBUG
     io.homo_efficio: DEBUG

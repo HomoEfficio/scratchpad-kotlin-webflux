@@ -44,7 +44,7 @@ internal class HelloControllerTest {
                 .willReturn(
                     HelloMessage(
                         "1",
-                        "Homo Efficio",
+                        "Homo",
                         "Hi all~ I am Homo Efficio"
                     )
                 )
@@ -61,7 +61,8 @@ internal class HelloControllerTest {
 //                )
                 HelloMsgJava(
                         null,
-                "Homo Efficio",
+//                "Homo Efficio",
+                "Homo",
                 "Hi all~ I am Homo Efficio"
                 )
             )
@@ -69,10 +70,11 @@ internal class HelloControllerTest {
             .expectBody<HelloMessage>()
             .consumeWith {
                 val helloMessage = it.responseBody
-                log.debug("msg.name: ${helloMessage?.username}")
+                log.debug("msg.username: ${helloMessage?.username}")
                 log.debug("msg.msg: ${helloMessage?.msg}")
                 log.debug("$helloMessage")
-                assertThat(helloMessage?.username).isEqualTo("Homo Efficio")
+//                assertThat(helloMessage?.username).isEqualTo("Homo Efficio")
+                assertThat(helloMessage?.username).isEqualTo("Homo")
                 assertThat(helloMessage?.msg).isEqualTo("Hi all~ I am Homo Efficio")
             }
     }
