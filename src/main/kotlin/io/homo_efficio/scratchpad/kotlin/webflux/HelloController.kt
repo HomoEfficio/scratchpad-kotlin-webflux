@@ -2,14 +2,15 @@ package io.homo_efficio.scratchpad.kotlin.webflux
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
-import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 import javax.validation.Valid
 
 @RequestMapping("/hello")
 @RestController
-class HelloController {
+class HelloController(
+        private val svc: HelloService
+    ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -18,16 +19,10 @@ class HelloController {
         return Mono.just(ResponseEntity.ok(name))
     }
 
-//    @PostMapping
-//    fun newHello(@Valid @RequestBody msg: HelloMessage):
-//            ResponseEntity<HelloMessage> {
-//
-//        return ResponseEntity.ok(msg)
-//    }
     @PostMapping
-    fun newHello(@Valid @RequestBody msg: HelloMsgJava):
-            ResponseEntity<HelloMsgJava> {
+    suspend fun newHello(@Valid @RequestBody msg: HelloMessage):
+            ResponseEntity<HelloMessage> {
 
-        return ResponseEntity.ok(msg)
+        return ResponseEntity.ok(svc.save(msg))
     }
 }
