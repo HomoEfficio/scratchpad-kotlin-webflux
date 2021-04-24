@@ -6,6 +6,7 @@ plugins {
     kotlin("jvm") version "1.4.32"
     kotlin("plugin.spring") version "1.4.32"
     kotlin("plugin.noarg") version "1.4.32"
+    id("com.sourcemuse.mongo") version "1.0.7"
 }
 
 group = "io.homo_efficio"
@@ -56,4 +57,8 @@ tasks.withType<Test> {
 
 noArg {
     annotation("io.homo_efficio.scratchpad.kotlin.webflux.NoArg")
+}
+
+mongo {
+    logging = "console"
 }
