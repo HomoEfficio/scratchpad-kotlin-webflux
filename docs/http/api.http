@@ -1,0 +1,8 @@
+POST {{urlPrefix}}/hello
+Content-Type: application/json
+
+{
+  "id": null,
+  "username": "long_username",
+   "msg": "message"
+}
