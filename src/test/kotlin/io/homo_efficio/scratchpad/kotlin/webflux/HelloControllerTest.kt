@@ -1,5 +1,7 @@
 package io.homo_efficio.scratchpad.kotlin.webflux
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
@@ -35,26 +37,32 @@ internal class HelloControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .bodyValue(
-//                HelloMessage(
-//                    null,
-//                    "Homo Efficio",
-//                    "Hi all~ I am Homo Efficio"
-//                )
-                HelloMsgJava(
+                HelloMessage(
                         null,
                 "Homo Efficio",
                 "Hi all~ I am Homo Efficio"
                 )
             )
             .exchange()
-            .expectBody<HelloMessage>()
+            .expectStatus().is4xxClientError
+            .expectBody<String>()
             .consumeWith {
-                val helloMessage = it.responseBody
-                log.debug("msg.name: ${helloMessage?.username}")
-                log.debug("msg.msg: ${helloMessage?.msg}")
-                log.debug("$helloMessage")
-                assertThat(helloMessage?.username).isEqualTo("Homo Efficio")
-                assertThat(helloMessage?.msg).isEqualTo("Hi all~ I am Homo Efficio")
+                val mapper = jacksonObjectMapper()
+                val responseJson =  """
+                    |{\"timestamp\":\"2021-04-24T00:47:17.053+00:00\",
+                    |\"path\":\"/hello\",
+                    |\"status\":400,
+                    |\"error\":\"Bad Request\",
+                    |\"message\":\"\",
+                    |\"requestId\":\"500d28d7\"}\n
+                """.trimIndent()
+                val result = mapper.readValue<Map<String, Any>>(responseJson)
+                assertThat(result["timestamp"] as String).isNotNull
+                assertThat(result["path"] as String).isEqualTo("/hello")
+                assertThat(result["status"] as Int).isEqualTo(400)
+                assertThat(result["error"] as String).isEqualTo("Bad Request")
+                assertThat(result["message"] as String).isEmpty()
+                assertThat(result["requestId"] as String).isNotNull()
             }
     }
 }
