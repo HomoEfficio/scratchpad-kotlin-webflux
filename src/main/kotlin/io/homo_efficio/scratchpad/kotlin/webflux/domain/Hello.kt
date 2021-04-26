@@ -1,4 +1,4 @@
-package io.homo_efficio.scratchpad.kotlin.webflux
+package io.homo_efficio.scratchpad.kotlin.webflux.domain
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document

@@ -1,4 +1,4 @@
-package io.homo_efficio.scratchpad.kotlin.webflux
+package io.homo_efficio.scratchpad.kotlin.webflux._config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration

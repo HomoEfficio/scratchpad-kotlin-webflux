@@ -1,5 +1,8 @@
-package io.homo_efficio.scratchpad.kotlin.webflux
+package io.homo_efficio.scratchpad.kotlin.webflux.service
 
+import io.homo_efficio.scratchpad.kotlin.webflux.domain.Hello
+import io.homo_efficio.scratchpad.kotlin.webflux.dto.HelloMessage
+import io.homo_efficio.scratchpad.kotlin.webflux.domain.HelloRepository
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.stereotype.Service
 
