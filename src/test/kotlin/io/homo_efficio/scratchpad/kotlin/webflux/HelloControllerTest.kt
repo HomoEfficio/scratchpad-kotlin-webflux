@@ -54,16 +54,10 @@ internal class HelloControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
             .bodyValue(
-//                HelloMessage(
-//                    null,
-//                    "Homo Efficio",
-//                    "Hi all~ I am Homo Efficio"
-//                )
-                HelloMsgJava(
-                        null,
-//                "Homo Efficio",
-                "Homo",
-                "Hi all~ I am Homo Efficio"
+                HelloMessage(
+                    null,
+                    "Homo Efficio",
+                    "Hi all~ I am Homo Efficio"
                 )
             )
             .exchange()
