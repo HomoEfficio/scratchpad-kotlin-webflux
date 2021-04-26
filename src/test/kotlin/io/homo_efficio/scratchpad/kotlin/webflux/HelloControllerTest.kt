@@ -37,41 +37,58 @@ internal class HelloControllerTest {
     }
 
     @Test
+    fun `new invalid hello message on suspend fun`() {
+        val username = "Homo"
+        stubNewMessage(username)
+
+        responseSpecNewMessage(username)
+            .expectStatus().isBadRequest
+    }
+
+    @Test
     fun `new hello message on suspend fun`() {
+        val username = "Hom" +
+                ""
+        stubNewMessage(username)
 
-        runBlocking {
-            given(svc.save(any()))
-                .willReturn(
-                    HelloMessage(
-                        "1",
-                        "Homo",
-                        "Hi all~ I am Homo Efficio"
-                    )
-                )
-        }
-
-        wtc.post().uri("/hello")
-            .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
-            .bodyValue(
-                HelloMessage(
-                    null,
-                    "Homo Efficio",
-                    "Hi all~ I am Homo Efficio"
-                )
-            )
-            .exchange()
+        responseSpecNewMessage(username)
+            .expectStatus().isOk
             .expectBody<HelloMessage>()
             .consumeWith {
                 val helloMessage = it.responseBody
                 log.debug("msg.username: ${helloMessage?.username}")
                 log.debug("msg.msg: ${helloMessage?.msg}")
                 log.debug("$helloMessage")
-//                assertThat(helloMessage?.username).isEqualTo("Homo Efficio")
-                assertThat(helloMessage?.username).isEqualTo("Homo")
+                assertThat(helloMessage?.username).isEqualTo(username)
                 assertThat(helloMessage?.msg).isEqualTo("Hi all~ I am Homo Efficio")
             }
     }
+
+
+    private fun stubNewMessage(username: String) {
+        runBlocking {
+            given(svc.save(any()))
+                .willReturn(
+                    HelloMessage(
+                        "1",
+                        username,
+                        "Hi all~ I am Homo Efficio"
+                    )
+                )
+        }
+    }
+
+    private fun responseSpecNewMessage(username: String) = wtc.post().uri("/hello")
+        .contentType(MediaType.APPLICATION_JSON)
+        .accept(MediaType.APPLICATION_JSON)
+        .bodyValue(
+            HelloMessage(
+                null,
+                username,
+                "Hi all~ I am Homo Efficio"
+            )
+        )
+        .exchange()
 
     @Suppress("UNCHECKED_CAST")
     private fun <T> any(): T {
