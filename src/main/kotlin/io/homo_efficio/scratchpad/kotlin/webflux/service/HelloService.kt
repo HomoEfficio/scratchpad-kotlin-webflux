@@ -6,14 +6,15 @@ import io.homo_efficio.scratchpad.kotlin.webflux.dto.HelloMessage
 import kotlinx.coroutines.reactive.awaitFirstOrElse
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.reactive.TransactionalOperator
 import org.springframework.transaction.reactive.executeAndAwait
 import java.util.Collections.unmodifiableList
 
 @Service
 class HelloService(
-        private val repo: HelloRepository,
-        private val txop: TransactionalOperator
+        private val repo: HelloRepository
+//        , private val txop: TransactionalOperator
     ) {
 
     suspend fun save(message: HelloMessage): HelloMessage {
@@ -41,9 +42,10 @@ class HelloService(
         }
     }
 
+    @Transactional
     suspend fun saveAllWithTx(vararg messages: HelloMessage) {
-        txop.executeAndAwait {
+//        txop.executeAndAwait {
             saveAll(*messages)
-        }
+//        }
     }
 }
