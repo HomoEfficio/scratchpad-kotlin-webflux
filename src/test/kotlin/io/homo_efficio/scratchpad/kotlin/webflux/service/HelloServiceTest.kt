@@ -23,6 +23,7 @@ internal class HelloServiceTest {
 
     @BeforeEach
     fun beforeEach() {
+        println("Deleting old data")
         repo.deleteAll().block()
     }
 
@@ -69,7 +70,10 @@ internal class HelloServiceTest {
 
             }
             val actual = svc.findAll()
-
+            println("total messages: " + actual.size)
+            println("message 1 - id: " + (actual[0].id))
+            println("message 1 - username: " + (actual[0].username))
+            println("message 1 - msg: " + (actual[0].msg))
 
             assertThat(actual.size).isEqualTo(1)
         }
@@ -96,7 +100,7 @@ internal class HelloServiceTest {
 
             }
             val actual = svc.findAll()
-
+            println("total messages: " + actual.size)
 
             assertThat(actual.size).isEqualTo(0)
         }
