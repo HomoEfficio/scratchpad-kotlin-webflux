@@ -6,11 +6,14 @@ import io.homo_efficio.scratchpad.kotlin.webflux.dto.HelloMessage
 import kotlinx.coroutines.reactive.awaitFirstOrElse
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.stereotype.Service
+import org.springframework.transaction.reactive.TransactionalOperator
+import org.springframework.transaction.reactive.executeAndAwait
 import java.util.Collections.unmodifiableList
 
 @Service
 class HelloService(
-        private val repo: HelloRepository
+        private val repo: HelloRepository,
+        private val txop: TransactionalOperator
     ) {
 
     suspend fun save(message: HelloMessage): HelloMessage {
@@ -34,13 +37,13 @@ class HelloService(
                 throw RuntimeException("2번째 저장 중 에러")
             }
             val (id, username, msg) = messages[i]
-            val dbHello = repo.save(Hello(id, username, msg)).awaitSingle()
+            repo.save(Hello(id, username, msg)).awaitSingle()
         }
     }
 
-    suspend fun saveWithTx(rollback: Boolean, vararg messages: HelloMessage) {
-        for (message in messages) {
-            save(message)
+    suspend fun saveAllWithTx(vararg messages: HelloMessage) {
+        txop.executeAndAwait {
+            saveAll(*messages)
         }
     }
 }

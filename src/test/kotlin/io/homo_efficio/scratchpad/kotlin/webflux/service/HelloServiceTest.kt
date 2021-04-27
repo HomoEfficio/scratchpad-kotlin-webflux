@@ -1,5 +1,6 @@
 package io.homo_efficio.scratchpad.kotlin.webflux.service
 
+import io.homo_efficio.scratchpad.kotlin.webflux._config.MongoConfig
 import io.homo_efficio.scratchpad.kotlin.webflux.domain.HelloRepository
 import io.homo_efficio.scratchpad.kotlin.webflux.dto.HelloMessage
 import kotlinx.coroutines.runBlocking
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 
 @DataMongoTest
 @ExtendWith(SpringExtension::class)
-@Import(HelloService::class)
+@Import(HelloService::class, MongoConfig::class)
 internal class HelloServiceTest {
 
     @Autowired private lateinit var svc: HelloService
@@ -71,6 +72,33 @@ internal class HelloServiceTest {
 
 
             assertThat(actual.size).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `rollback test`() {
+        runBlocking {
+            val msg1 = HelloMessage(
+                null,
+                "username-01",
+                "Message-01"
+            )
+            val msg2 = HelloMessage(
+                null,
+                "username-02",
+                "Message-02"
+            )
+
+
+            try {
+                svc.saveAllWithTx(msg1, msg2)
+            } catch (e: Exception) {
+
+            }
+            val actual = svc.findAll()
+
+
+            assertThat(actual.size).isEqualTo(0)
         }
     }
 }
