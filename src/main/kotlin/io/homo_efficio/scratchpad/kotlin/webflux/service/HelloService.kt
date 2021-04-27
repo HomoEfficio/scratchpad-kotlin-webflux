@@ -26,4 +26,21 @@ class HelloService(
             .map { mutableList -> unmodifiableList(mutableList) as List<HelloMessage> }
             .awaitFirstOrElse { emptyList() }
     }
+
+    suspend fun saveAll(vararg messages: HelloMessage) {
+        val size = messages.size
+        for (i in 0 until size) {
+            if (i == 1) {
+                throw RuntimeException("2번째 저장 중 에러")
+            }
+            val (id, username, msg) = messages[i]
+            val dbHello = repo.save(Hello(id, username, msg)).awaitSingle()
+        }
+    }
+
+    suspend fun saveWithTx(rollback: Boolean, vararg messages: HelloMessage) {
+        for (message in messages) {
+            save(message)
+        }
+    }
 }

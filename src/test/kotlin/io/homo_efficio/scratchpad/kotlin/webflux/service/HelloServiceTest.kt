@@ -1,8 +1,10 @@
 package io.homo_efficio.scratchpad.kotlin.webflux.service
 
+import io.homo_efficio.scratchpad.kotlin.webflux.domain.HelloRepository
 import io.homo_efficio.scratchpad.kotlin.webflux.dto.HelloMessage
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +18,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 internal class HelloServiceTest {
 
     @Autowired private lateinit var svc: HelloService
+    @Autowired private lateinit var repo: HelloRepository
 
+    @BeforeEach
+    fun beforeEach() {
+        repo.deleteAll().block()
+    }
 
     @Test
     fun `find all 2 messages`() {
@@ -37,6 +44,33 @@ internal class HelloServiceTest {
             val actual: List<HelloMessage> = svc.findAll()
 
             assertThat(actual.size).isEqualTo(2)
+        }
+    }
+
+    @Test
+    fun `not rollback test`() {
+        runBlocking {
+            val msg1 = HelloMessage(
+                null,
+                "username-01",
+                "Message-01"
+            )
+            val msg2 = HelloMessage(
+                null,
+                "username-02",
+                "Message-02"
+            )
+
+
+            try {
+                svc.saveAll(msg1, msg2)
+            } catch (e: Exception) {
+
+            }
+            val actual = svc.findAll()
+
+
+            assertThat(actual.size).isEqualTo(1)
         }
     }
 }
