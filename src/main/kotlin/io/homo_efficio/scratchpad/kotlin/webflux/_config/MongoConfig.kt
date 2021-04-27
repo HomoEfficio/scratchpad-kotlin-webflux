@@ -5,11 +5,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory
 import org.springframework.data.mongodb.ReactiveMongoTransactionManager
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration
-import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories
 import org.springframework.transaction.reactive.TransactionalOperator
 
 @Configuration
-@EnableReactiveMongoRepositories
 class MongoConfig : AbstractReactiveMongoConfiguration() {
 
     override fun getDatabaseName(): String {
